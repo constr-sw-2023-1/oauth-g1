@@ -17,4 +17,4 @@ services:
     volumes:
       - keycloak-data:/opt/jboss/keycloak/standalone/data
     networks:
-      - grupo1
+      - grupoum
