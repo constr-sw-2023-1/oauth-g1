@@ -1,3 +1,17 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    constsw:
+      grupoum:
+        oauth: ${LOGGING_LEVEL:INFO}
+  file:
+    name: log.log
+    pattern: log.%d{yyyy-MM-dd}.log
+    max-history: 10
+
 integration:
   keycloak:
-    url: http://localhost:8090
+    url: ${KEYCLOAK_URL:http://localhost:8090}
