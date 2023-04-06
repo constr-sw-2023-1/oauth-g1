@@ -1,6 +1,9 @@
 package constsw.grupoum.oauth.integration.keycloak.service.impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -10,9 +13,11 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
+import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.record.UserInfo;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
 
@@ -64,6 +69,33 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .header("Authorization", String.format("Bearer %s", requestUserInfo.token()))
                     .retrieve()
                     .bodyToMono(UserInfo.class)
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Override
+    public Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException {
+        try {
+
+            return WebClient
+                    .create(url)
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users")
+                            .build(requestAllUsers.realm()))
+                    .header("Authorization", requestAllUsers.acessToken())
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
+                    })
                     .block();
 
         } catch (WebClientRequestException e) {
