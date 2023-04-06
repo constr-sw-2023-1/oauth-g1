@@ -1,10 +1,21 @@
 version: '3.4'
 networks:
-  grupo1:
+  grupoum:
 volumes:
   keycloak-data:
     external: true
 services:
+  spring:
+    container_name: spring
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - grupoum
+    depends_on:
+      - keycloak
   keycloak:
     container_name: keycloak
     image: jboss/keycloak:latest
