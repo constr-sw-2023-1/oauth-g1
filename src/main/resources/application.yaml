@@ -14,4 +14,5 @@ logging:
 
 integration:
   keycloak:
-    url: ${KEYCLOAK_URL:http://localhost:8090}
+    realm: ${KEYCLOAK_REALM:master}
+    url: ${KEYCLOAK_URL:http://localhost:8090/auth}
