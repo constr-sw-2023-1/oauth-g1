@@ -4,6 +4,13 @@ server:
 logging:
   level:
     root: INFO
+    constsw:
+      grupoum:
+        oauth: ${LOGGING_LEVEL:INFO}
+  file:
+    name: log.log
+    pattern: log.%d{yyyy-MM-dd}.log
+    max-history: 10
 
 integration:
   keycloak:
