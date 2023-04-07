@@ -34,4 +34,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User creatUser(String accessToken, User user) throws ApiException {
+        try {
+            return keycloakService.createUser(realm ,accessToken, user);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+            String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+            e);
+        }
+    }
+
 }

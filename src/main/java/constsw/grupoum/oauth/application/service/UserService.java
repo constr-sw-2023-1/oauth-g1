@@ -8,5 +8,5 @@ import constsw.grupoum.oauth.integration.keycloak.record.User;
 public interface UserService {
 
     Collection<User> findAll(String acessToken) throws ApiException;
-
+    User creatUser(String accessToken, User user) throws ApiException;
 }

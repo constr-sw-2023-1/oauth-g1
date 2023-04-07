@@ -18,4 +18,6 @@ public interface KeycloakService {
 
     Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
 
+    User createUser(String realm, String accessToken, User user) throws KeycloakException;
+
 }

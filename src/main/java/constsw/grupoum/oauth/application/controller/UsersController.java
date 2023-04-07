@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,4 +45,17 @@ public class UsersController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestHeader("Authorization") String accessToken, User user) {
+        try {
+            log.info(String.format("POST -> /users BODY: %s", user));
+            User createdUser = service.creatUser(accessToken, user);
+            log.info(String.format("POST -> /users RESPONSE: %s", createdUser));
+
+            return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+        }
+    }
 }
