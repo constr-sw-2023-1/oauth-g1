@@ -45,7 +45,7 @@ public class UsersController {
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {
 
