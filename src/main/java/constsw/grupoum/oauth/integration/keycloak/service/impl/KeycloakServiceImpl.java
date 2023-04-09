@@ -1,6 +1,9 @@
 package constsw.grupoum.oauth.integration.keycloak.service.impl;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -10,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
@@ -80,18 +84,19 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public User userById(RequestUserById requestUserById) throws KeycloakException {
+    public Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException {
         try {
 
             return WebClient
                     .create(url)
                     .get()
                     .uri(uriBuilder -> uriBuilder
-                            .path("/admin/realms/{realm}/users/{id}")
-                            .build(requestUserById.realm(),requestUserById.id()))
-                    .header("Authorization", String.format("Bearer %s", requestUserById.acessToken()))
+                            .path("/admin/realms/{realm}/users")
+                            .build(requestAllUsers.realm()))
+                    .header("Authorization", requestAllUsers.acessToken())
                     .retrieve()
-                    .bodyToMono(User.class)
+                    .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
+                    })
                     .block();
 
         } catch (WebClientRequestException e) {
