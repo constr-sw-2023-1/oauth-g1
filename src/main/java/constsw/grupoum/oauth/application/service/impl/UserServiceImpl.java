@@ -36,9 +36,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User finById(String acessToken, String id) throws ApiException {
+    public User finById(String authorization, String id) throws ApiException {
         try {
-            RequestUserById requestUserById = new RequestUserById(realm, acessToken, id);
+            RequestUserById requestUserById = new RequestUserById(realm, authorization, id);
             return keycloakService.userById(requestUserById);
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),
