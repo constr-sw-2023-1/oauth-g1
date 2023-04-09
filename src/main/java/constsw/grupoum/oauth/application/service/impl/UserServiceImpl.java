@@ -11,6 +11,7 @@ import constsw.grupoum.oauth.application.record.RequestNewUser;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -39,6 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User finById(String authorization, String id) throws ApiException {
+        try {
+            RequestUserById requestUserById = new RequestUserById(realm, authorization, id);
+            return keycloakService.userById(requestUserById);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
+        }
+    }
+
+    @Override
     public ResponseNewUser creatUser(String authorization, RequestNewUser request) throws ApiException {
         try {
             RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
@@ -54,7 +67,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public String generateRandomId() {
-        return UUID.randomUUID().toString();
-    }
 }
