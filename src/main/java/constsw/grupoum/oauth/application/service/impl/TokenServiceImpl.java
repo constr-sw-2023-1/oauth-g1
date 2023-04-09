@@ -20,12 +20,16 @@ public class TokenServiceImpl implements TokenService {
     private String realm;
     @Value("${integration.keycloak.client-id}")
     private String clientId;
+    @Value("${integration.keycloak.client-secret}")
+    private String clientSecret = "aham";
 
     private final KeycloakService keycloakService;
 
     public Token retrieveTokenWithCredentials(RequestLogin requestLogin) throws ApiException {
         try {
-            RequestToken request = new RequestToken(realm, clientId, requestLogin.username(), requestLogin.password(), "", "password");
+            RequestToken request = new RequestToken(realm, clientId, clientSecret, requestLogin.username(),
+                    requestLogin.password(),
+                    "", "password");
             return keycloakService.token(request);
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),
@@ -36,7 +40,9 @@ public class TokenServiceImpl implements TokenService {
 
     public Token retrieveTokenWithRefreshToken(RequestRefreshToken requestRefreshToken) throws ApiException {
         try {
-            RequestToken request = new RequestToken(realm, clientId, "", "", requestRefreshToken.refreshToken(), "refresh_token");
+            RequestToken request = new RequestToken(realm, clientId, clientSecret, "", "",
+                    requestRefreshToken.refreshToken(),
+                    "refresh_token");
             return keycloakService.token(request);
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),

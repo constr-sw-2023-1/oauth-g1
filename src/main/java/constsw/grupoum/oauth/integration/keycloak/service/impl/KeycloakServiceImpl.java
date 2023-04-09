@@ -37,6 +37,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                             .path("/realms/{realm}/protocol/openid-connect/token")
                             .build(requestToken.realm()))
                     .body(BodyInserters.fromFormData("client_id", requestToken.clientId())
+                            .with("client_secret", requestToken.clientSecret())
                             .with("username", requestToken.username())
                             .with("password", requestToken.password())
                             .with("refresh_token", requestToken.refreshToken())
