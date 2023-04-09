@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
             RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
                     request.username(),
                     request.email(), request.firstName(), request.lastName(), true);
-            String userId = keycloakService.createUser("contrucao", authorization, newUser);
+            String userId = keycloakService.createUser(realm, authorization, newUser);
             return new ResponseNewUser(userId, request.username(), request.email(), request.firstName(),
                     request.lastName(), true);
         } catch (KeycloakException e) {

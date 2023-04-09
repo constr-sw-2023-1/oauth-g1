@@ -1,10 +1,13 @@
 package constsw.grupoum.oauth.integration.keycloak.service.impl;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,21 +15,29 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
+import constsw.grupoum.oauth.integration.keycloak.exception.UserIdNaoEncontradoException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
-import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.record.UserInfo;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
+import constsw.grupoum.oauth.util.HeadersUtils;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class KeycloakServiceImpl implements KeycloakService {
 
     @Value("${integration.keycloak.url}")
     private String url;
+
+    private final HeadersUtils headersUtils;
+
+    private final Pattern USER_ID = Pattern.compile("(?<=(.*\\/users\\/)).*");
 
     @Override
     public Token token(RequestToken requestToken) throws KeycloakException {
@@ -111,26 +122,37 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException {
+    public String createUser(String realm, String authorization, RequestNewUserKeycloak user) throws KeycloakException {
         try {
 
-            WebClient
+            ResponseEntity<Void> response = WebClient
                     .create(url)
                     .post()
                     .uri(uriBuilder -> uriBuilder
                             .path("/admin/realms/{realm}/users")
                             .build(realm))
-                    .header("Authorization", accessToken)
-                    .body(user, RequestNewUserKeycloak.class)
-                    .retrieve();
+                    .header("Authorization", authorization)
+                    .body(BodyInserters.fromValue(user))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
 
-            return "OK";
+            String location = headersUtils.getValue(response.getHeaders(), "Location");
+            Matcher matcher = USER_ID.matcher(location);
+
+            if (matcher.find())
+                return matcher.group();
+
+            throw new UserIdNaoEncontradoException();
+
         } catch (WebClientRequestException e) {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
         } catch (WebClientResponseException e) {
             throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
                     e.getResponseBodyAs(Error.class),
                     e);
+        } catch (KeycloakException e) {
+            throw e;
         } catch (Exception e) {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
