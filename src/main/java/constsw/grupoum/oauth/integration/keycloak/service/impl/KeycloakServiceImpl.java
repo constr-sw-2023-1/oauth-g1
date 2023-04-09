@@ -39,8 +39,8 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .body(BodyInserters.fromFormData("client_id", requestToken.clientId())
                             .with("username", requestToken.username())
                             .with("password", requestToken.password())
-                            .with("grant_type", requestToken.grantType())
-                            .with("client_secret", requestToken.clientSecret()))
+                            .with("refresh_token", requestToken.refreshToken())
+                            .with("grant_type", requestToken.grantType()))
                     .retrieve()
                     .bodyToMono(Token.class)
                     .block();

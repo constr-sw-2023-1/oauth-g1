@@ -4,6 +4,6 @@ public record RequestToken(String realm,
                 String clientId,
                 String username,
                 String password,
-                String grantType,
-                String clientSecret) {
+                String refreshToken,
+                String grantType) {
 }
