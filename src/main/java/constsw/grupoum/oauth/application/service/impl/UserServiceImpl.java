@@ -1,7 +1,6 @@
 package constsw.grupoum.oauth.application.service.impl;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,9 +10,9 @@ import constsw.grupoum.oauth.application.record.RequestNewUser;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
-import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
