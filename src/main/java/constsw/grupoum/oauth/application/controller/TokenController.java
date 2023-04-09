@@ -37,9 +37,9 @@ public class TokenController {
     @PostMapping(path = "/token", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken){
         try {
-            log.info(String.format("POST -> /login Request Body: Refresh Token: %s", requestRefreshToken.refreshToken()));
+            log.info(String.format("POST -> /token Request Body: Refresh Token: %s", requestRefreshToken.refreshToken()));
             Token token = tokenService.retrieveTokenWithRefreshToken(requestRefreshToken);
-            log.info(String.format("POST -> /login RESPONSE: %s", token));
+            log.info(String.format("POST -> /token RESPONSE: %s", token));
 
             return new ResponseEntity<Token>(token, HttpStatus.OK);
         } catch (ApiException e) {
