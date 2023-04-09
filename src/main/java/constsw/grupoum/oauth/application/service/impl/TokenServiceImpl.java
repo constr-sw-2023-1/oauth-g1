@@ -18,7 +18,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Value("${integration.keycloak.realm}")
     private String realm;
-    @Value("${integration.keycloak.clientId}")
+    @Value("${integration.keycloak.client-id}")
     private String clientId;
 
     private final KeycloakService keycloakService;

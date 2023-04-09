@@ -16,4 +16,4 @@ integration:
   keycloak:
     realm: ${KEYCLOAK_REALM:master}
     url: ${KEYCLOAK_URL:http://localhost:8090/auth}
-    clientId: ${KEYCLOAK_CLIENT_ID:admin-cli}
+    client-id: ${KEYCLOAK_CLIENT_ID:client-id}
