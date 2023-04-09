@@ -3,7 +3,7 @@ package constsw.grupoum.oauth.integration.keycloak.service;
 import java.util.Collection;
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
-import constsw.grupoum.oauth.integration.keycloak.record.NewUser;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
@@ -19,6 +19,6 @@ public interface KeycloakService {
 
     Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
 
-    void createUser(String realm, String accessToken, NewUser user) throws KeycloakException;
+    String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
 
 }

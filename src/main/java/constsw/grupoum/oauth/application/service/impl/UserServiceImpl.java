@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
-import constsw.grupoum.oauth.integration.keycloak.record.NewUser;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
@@ -37,17 +39,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void creatUser(String accessToken, String name) throws ApiException {
+    public ResponseNewUser creatUser(String authorization, RequestNewUser request) throws ApiException {
         try {
-            NewUser newUser = new NewUser(name, generateRandomId(),true); 
-            keycloakService.createUser(realm ,accessToken, newUser);
+            RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
+                    request.username(),
+                    request.email(), request.firstName(), request.lastName(), true);
+            String userId = keycloakService.createUser("contrucao", authorization, newUser);
+            return new ResponseNewUser(userId, request.username(), request.email(), request.firstName(),
+                    request.lastName(), true);
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),
-            String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
-            e);
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
         }
     }
-
 
     public String generateRandomId() {
         return UUID.randomUUID().toString();

@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.application.util.HeadersUtils;
-import constsw.grupoum.oauth.integration.keycloak.record.NewUser;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -47,12 +48,13 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers , String name) {
+    public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, RequestNewUser user) {
         try {
-            log.info(String.format("POST -> /users BODY: %s", name));
-            service.creatUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), name);
+            log.info(String.format("POST -> /users BODY: %s", user));
+            ResponseNewUser newUser = service.creatUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+                    user);
             log.info(String.format("POST -> /users RESPONSE: %s", HttpStatus.CREATED));
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+            return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<String>(e.getMessage(), e.getStatus());
