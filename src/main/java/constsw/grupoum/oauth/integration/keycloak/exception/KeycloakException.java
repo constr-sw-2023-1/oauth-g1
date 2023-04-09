@@ -17,6 +17,11 @@ public class KeycloakException extends Exception {
         this.status = status;
     }
 
+    public KeycloakException(HttpStatus status, Error error) {
+        this.status = status;
+        this.error = error;
+    }
+
     public KeycloakException(HttpStatus status, Error error, Throwable cause) {
         super(cause);
         this.status = status;

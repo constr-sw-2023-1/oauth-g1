@@ -7,14 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
-import constsw.grupoum.oauth.application.util.HeadersUtils;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
+import constsw.grupoum.oauth.util.HeadersUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -54,6 +58,20 @@ public class UsersController {
             log.info(String.format("GET -> /users/{id} RESPONSE: %s", user));
 
             return new ResponseEntity<User>(user, HttpStatus.OK);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user) {
+        try {
+            log.info(String.format("POST -> /users BODY: %s", user));
+            ResponseNewUser newUser = service.creatUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+                    user);
+            log.info(String.format("POST -> /users RESPONSE: %s", HttpStatus.CREATED));
+            return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<String>(e.getMessage(), e.getStatus());
