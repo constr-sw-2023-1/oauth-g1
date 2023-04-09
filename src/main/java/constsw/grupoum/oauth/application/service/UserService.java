@@ -3,10 +3,11 @@ package constsw.grupoum.oauth.application.service;
 import java.util.Collection;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.integration.keycloak.record.NewUser;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 
 public interface UserService {
 
     Collection<User> findAll(String acessToken) throws ApiException;
-    User creatUser(String accessToken, User user) throws ApiException;
+    void creatUser(String accessToken, String name) throws ApiException;
 }

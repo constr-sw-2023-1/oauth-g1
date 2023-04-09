@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
+import constsw.grupoum.oauth.integration.keycloak.record.NewUser;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
@@ -110,20 +111,18 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public User createUser(String realm, String accessToken, User user) throws KeycloakException {
+    public void createUser(String realm, String accessToken, NewUser user) throws KeycloakException {
         try {
 
-            return WebClient
+            WebClient
                     .create(url)
                     .post()
                     .uri(uriBuilder -> uriBuilder
                             .path("/admin/realms/{realm}/users")
                             .build(realm))
                     .header("Authorization", accessToken)
-                    .body(BodyInserters.fromValue(user))
-                    .retrieve()
-                    .bodyToMono(User.class)
-                    .block();
+                    .body(user, NewUser.class)
+                    .retrieve();
 
         } catch (WebClientRequestException e) {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
