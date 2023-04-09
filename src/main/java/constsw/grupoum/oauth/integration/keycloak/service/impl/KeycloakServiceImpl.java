@@ -110,4 +110,31 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
     }
 
+    @Override
+    public User userById(RequestUserById requestUserById) throws KeycloakException {
+        try {
+
+            return WebClient
+                    .create(url)
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}")
+                            .build(requestUserById.realm(), requestUserById.id()))
+                    .header("Authorization", requestUserById.acessToken())
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<User>() {
+                    })
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
 }

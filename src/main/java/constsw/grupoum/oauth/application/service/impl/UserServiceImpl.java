@@ -37,8 +37,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User finById(String acessToken, String id) throws ApiException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finById'");
+        try {
+            RequestUserById requestUserById = new RequestUserById(realm, acessToken, id);
+            return keycloakService.userById(requestUserById);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
+        }
     }
 
 }
