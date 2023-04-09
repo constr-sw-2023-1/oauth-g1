@@ -15,6 +15,7 @@ import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -95,6 +96,33 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .header("Authorization", requestAllUsers.acessToken())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
+                    })
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Override
+    public User userById(RequestUserById requestUserById) throws KeycloakException {
+        try {
+
+            return WebClient
+                    .create(url)
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}")
+                            .build(requestUserById.realm(), requestUserById.id()))
+                    .header("Authorization", requestUserById.authorization())
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<User>() {
                     })
                     .block();
 
