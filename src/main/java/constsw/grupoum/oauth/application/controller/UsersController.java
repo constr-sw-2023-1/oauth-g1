@@ -17,6 +17,7 @@ import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.application.util.HeadersUtils;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -48,7 +49,7 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, RequestNewUser user) {
+    public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user) {
         try {
             log.info(String.format("POST -> /users BODY: %s", user));
             ResponseNewUser newUser = service.creatUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
