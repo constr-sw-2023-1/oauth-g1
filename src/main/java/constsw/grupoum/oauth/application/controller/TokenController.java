@@ -18,12 +18,14 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @RestController
 public class TokenController {
+
     private final TokenService tokenService;
 
     @PostMapping(path = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> login(@ModelAttribute RequestLogin requestLogin){
+    public ResponseEntity<?> login(@ModelAttribute RequestLogin requestLogin) {
         try {
-            log.info(String.format("POST -> /login Request Body: Username: %s Password: *****", requestLogin.username()));
+            log.info(String.format("POST -> /login Request Body: Username: %s Password: *****",
+                    requestLogin.username()));
             Token token = tokenService.retrieveTokenWithCredentials(requestLogin);
             log.info(String.format("POST -> /login RESPONSE: %s", token));
 
@@ -35,9 +37,10 @@ public class TokenController {
     }
 
     @PostMapping(path = "/token", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken){
+    public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken) {
         try {
-            log.info(String.format("POST -> /token Request Body: Refresh Token: %s", requestRefreshToken.refreshToken()));
+            log.info(String.format("POST -> /token Request Body: Refresh Token: %s",
+                    requestRefreshToken.refreshToken()));
             Token token = tokenService.retrieveTokenWithRefreshToken(requestRefreshToken);
             log.info(String.format("POST -> /token RESPONSE: %s", token));
 
