@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,26 @@ public class UsersController {
             log.info(String.format("GET -> /users RESPONSE: %s", users));
 
             return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+        }
+    }
+
+    @Operation(description = "Delete user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
+        try {
+
+            log.info("DELETE -> /users/{id}");
+            service.deleteUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<String>(e.getMessage(), e.getStatus());
