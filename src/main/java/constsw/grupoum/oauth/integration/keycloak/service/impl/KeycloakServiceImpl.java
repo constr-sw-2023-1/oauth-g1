@@ -132,7 +132,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .create(url)
                     .delete()
                     .uri(uriBuilder -> uriBuilder
-                            .path("/auth/realms/{realm}/users/{id}")
+                            .path("/admin/realms/{realm}/users/{id}")
                             .build(requestDeleteUserById.realm(), requestDeleteUserById.id()))
                     .header("Authorization", requestDeleteUserById.accessToken())
                     .retrieve()
