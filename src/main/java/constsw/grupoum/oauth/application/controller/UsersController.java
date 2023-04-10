@@ -1,5 +1,8 @@
 package constsw.grupoum.oauth.application.controller;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
 import java.util.Collection;
 
 import org.springframework.http.HttpHeaders;
@@ -19,6 +22,12 @@ import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.util.HeadersUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -34,6 +43,11 @@ public class UsersController {
 
     private final UserService service;
 
+    @Operation(description = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = User.class)))),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @GetMapping
     public ResponseEntity<?> getAllUsers(@RequestHeader HttpHeaders headers) {
         try {
