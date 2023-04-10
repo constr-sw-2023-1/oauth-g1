@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
@@ -17,5 +18,6 @@ public interface KeycloakService {
     UserInfo userInfo(RequestUserInfo requestUserInfo) throws KeycloakException;
 
     Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
-
+   
+    Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException;
 }

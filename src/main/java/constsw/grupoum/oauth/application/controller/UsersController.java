@@ -5,7 +5,9 @@ import java.util.Collection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,20 @@ public class UsersController {
             log.info(String.format("GET -> /users RESPONSE: %s", users));
 
             return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> getUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
+        try {
+
+            log.info("DELETE -> /users/{id}");
+            service.deleteUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
+
+            return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<String>(e.getMessage(), e.getStatus());

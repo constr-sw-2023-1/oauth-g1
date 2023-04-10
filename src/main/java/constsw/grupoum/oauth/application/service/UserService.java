@@ -9,4 +9,5 @@ public interface UserService {
 
     Collection<User> findAll(String acessToken) throws ApiException;
 
+    void deleteUser(String accessToken, String id) throws ApiException;
 }
