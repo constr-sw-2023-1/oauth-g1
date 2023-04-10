@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.exception.UserIdNaoEncontradoException;
+import constsw.grupoum.oauth.integration.keycloak.record.DisableUser;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
@@ -125,18 +126,20 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException {
+    public void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException {
         try {
+            DisableUser disableUser = new DisableUser(requestDeleteUserById.id(), false);
 
-            return WebClient
+            WebClient
                     .create(url)
-                    .delete()
+                    .put()
                     .uri(uriBuilder -> uriBuilder
                             .path("/admin/realms/{realm}/users/{id}")
                             .build(requestDeleteUserById.realm(), requestDeleteUserById.id()))
                     .header("Authorization", requestDeleteUserById.accessToken())
+                    .body(BodyInserters.fromValue(disableUser))
                     .retrieve()
-                    .bodyToMono(Void.class)
+                    .toBodilessEntity()
                     .block();
 
         } catch (WebClientRequestException e) {
@@ -149,7 +152,7 @@ public class KeycloakServiceImpl implements KeycloakService {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
-    
+
     public User userById(RequestUserById requestUserById) throws KeycloakException {
         try {
 

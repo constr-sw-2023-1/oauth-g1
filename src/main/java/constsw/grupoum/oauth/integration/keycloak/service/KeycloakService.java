@@ -20,8 +20,8 @@ public interface KeycloakService {
     UserInfo userInfo(RequestUserInfo requestUserInfo) throws KeycloakException;
 
     Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
-   
-    Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException;
+
+    void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException;
 
     User userById(RequestUserById requestUserById) throws KeycloakException;
 
