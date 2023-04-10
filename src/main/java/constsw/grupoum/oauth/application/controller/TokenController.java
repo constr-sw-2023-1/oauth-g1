@@ -49,6 +49,10 @@ public class TokenController {
         }
     }
 
+    @Operation(description = "Refresh token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = Token.class))),
+        @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @PostMapping(path = "/token", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken) {
         try {
