@@ -11,6 +11,7 @@ import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -59,6 +60,17 @@ public class UserServiceImpl implements UserService {
             String userId = keycloakService.createUser(realm, authorization, newUser);
             return new ResponseNewUser(userId, request.username(), request.email(), request.firstName(),
                     request.lastName(), true);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
+        }
+    }
+
+    @Override
+    public void newPassword(String authorization, String id, String password) throws ApiException {
+        try {
+            keycloakService.newPassword(realm, authorization, id, new RequestNewPassword("password", password, false));
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),
                     String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),

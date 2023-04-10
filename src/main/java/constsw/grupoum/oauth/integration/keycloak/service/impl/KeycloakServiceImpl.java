@@ -18,6 +18,7 @@ import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.exception.UserIdNaoEncontradoException;
 import constsw.grupoum.oauth.integration.keycloak.record.Error;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
@@ -182,6 +183,33 @@ public class KeycloakServiceImpl implements KeycloakService {
                     e);
         } catch (KeycloakException e) {
             throw e;
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Override
+    public void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword) throws KeycloakException {
+        try {
+
+            WebClient
+                    .create(url)
+                    .put()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}/reset-password")
+                            .build(realm, id))
+                    .header("Authorization", authorization)
+                    .body(BodyInserters.fromValue(requestNewPassword))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
         } catch (Exception e) {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }

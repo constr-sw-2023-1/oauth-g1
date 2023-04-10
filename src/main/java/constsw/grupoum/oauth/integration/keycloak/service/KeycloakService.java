@@ -5,6 +5,7 @@ import java.util.Collection;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
@@ -24,4 +25,5 @@ public interface KeycloakService {
 
     String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
 
+    void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword) throws KeycloakException;
 }
