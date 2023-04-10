@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
@@ -50,11 +51,13 @@ public class UsersController {
             @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @GetMapping
-    public ResponseEntity<?> getAllUsers(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<?> getAllUsers(@RequestHeader HttpHeaders headers,
+            @RequestParam(required = false) Boolean enabled) {
         try {
 
             log.info("GET -> /users");
-            Collection<User> users = service.findAll(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION));
+            Collection<User> users = service.findAll(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+                    enabled);
             log.info(String.format("GET -> /users RESPONSE: %s", users));
 
             return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
@@ -66,10 +69,10 @@ public class UsersController {
 
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204"),
-        @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {

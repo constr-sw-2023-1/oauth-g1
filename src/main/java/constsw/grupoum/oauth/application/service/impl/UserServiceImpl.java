@@ -28,10 +28,12 @@ public class UserServiceImpl implements UserService {
     private final KeycloakService keycloakService;
 
     @Override
-    public Collection<User> findAll(String acessToken) throws ApiException {
+    public Collection<User> findAll(String authorization, Boolean enabled) throws ApiException {
         try {
-            RequestAllUsers requestAllUsers = new RequestAllUsers(realm, acessToken);
+            RequestAllUsers requestAllUsers = new RequestAllUsers(realm, authorization, enabled);
+
             return keycloakService.getAllUsers(requestAllUsers);
+
         } catch (KeycloakException e) {
             throw new ApiException(e.getStatus(),
                     String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
