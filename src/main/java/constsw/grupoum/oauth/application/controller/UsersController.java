@@ -63,6 +63,12 @@ public class UsersController {
         }
     }
 
+    @Operation(description = "Get user by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {
