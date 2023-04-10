@@ -1,9 +1,7 @@
 package constsw.grupoum.oauth.integration.keycloak.record;
 
-import java.util.Date;
-
 public record User(String id,
-        Date createdTimestamp,
+        String createdTimestamp,
         String username,
         Boolean enabled,
         Boolean emailVerified,

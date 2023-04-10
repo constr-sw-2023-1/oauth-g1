@@ -1,4 +1,4 @@
-package constsw.grupoum.oauth.application.util;
+package constsw.grupoum.oauth.util;
 
 import java.util.List;
 
