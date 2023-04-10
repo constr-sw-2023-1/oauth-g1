@@ -66,10 +66,10 @@ public class UsersController {
 
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204"),
-        @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {

@@ -149,7 +149,7 @@ public class KeycloakServiceImpl implements KeycloakService {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
-    
+
     public User userById(RequestUserById requestUserById) throws KeycloakException {
         try {
 
