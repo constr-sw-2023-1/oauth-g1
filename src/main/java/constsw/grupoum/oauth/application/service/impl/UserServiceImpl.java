@@ -66,4 +66,18 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void updateUser(String authorization, String id, RequestNewUser request) throws ApiException {
+        try {
+            RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
+                    request.username(),
+                    request.email(), request.firstName(), request.lastName(), true);
+            keycloakService.updateUser(realm, authorization, id, newUser);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
+        }
+    }
+
 }

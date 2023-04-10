@@ -187,4 +187,32 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
     }
 
+    @Override
+    public void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak user) throws KeycloakException {
+        try {
+
+            Object a = WebClient
+                    .create(url)
+                    .put()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}")
+                            .build(realm, id))
+                    .header("Authorization", authorization)
+                    .body(BodyInserters.fromValue(user))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+            
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 }

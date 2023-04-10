@@ -13,4 +13,5 @@ public interface UserService {
 
     Collection<User> findAll(String acessToken) throws ApiException;
     ResponseNewUser creatUser(String authorization, RequestNewUser name) throws ApiException;
-}
+    void updateUser(String authorization, String id, RequestNewUser user) throws ApiException;
+}   

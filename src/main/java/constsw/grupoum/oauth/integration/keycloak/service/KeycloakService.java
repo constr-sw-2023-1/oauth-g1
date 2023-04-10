@@ -24,4 +24,6 @@ public interface KeycloakService {
 
     String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
 
+    void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak newUser) throws KeycloakException;
+
 }
