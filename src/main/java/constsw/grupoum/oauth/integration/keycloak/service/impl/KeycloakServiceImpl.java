@@ -191,7 +191,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     public void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak user) throws KeycloakException {
         try {
 
-            Object a = WebClient
+            WebClient
                     .create(url)
                     .put()
                     .uri(uriBuilder -> uriBuilder
