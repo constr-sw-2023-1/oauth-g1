@@ -1,4 +1,6 @@
 package constsw.grupoum.oauth.application.record;
 
-public record RequestRefreshToken(String refreshToken) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record RequestRefreshToken(@JsonProperty("refresh_token") String refreshToken) {
 }

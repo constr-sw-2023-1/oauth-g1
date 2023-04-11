@@ -73,7 +73,7 @@ public class UsersController {
 
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(implementation = Void.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
@@ -85,7 +85,7 @@ public class UsersController {
             log.info("DELETE -> /users/{id}");
             service.deleteUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());

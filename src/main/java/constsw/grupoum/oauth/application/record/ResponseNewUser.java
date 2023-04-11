@@ -1,5 +1,13 @@
 package constsw.grupoum.oauth.application.record;
 
-public record ResponseNewUser(String id, String username, String email, String firstName, String lastName, Boolean enabled) {
-    
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record ResponseNewUser(
+        @JsonProperty("id") String id,
+        @JsonProperty("username") String username,
+        @JsonProperty("email") String email,
+        @JsonProperty("first_name") String firstName,
+        @JsonProperty("last_name") String lastName,
+        @JsonProperty("enabled") Boolean enabled) {
+
 }
