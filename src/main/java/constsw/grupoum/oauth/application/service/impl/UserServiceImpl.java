@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.exception.FilterException;
 import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
+import constsw.grupoum.oauth.application.mapper.UserMapper;
 import constsw.grupoum.oauth.application.record.RequestNewUser;
 import constsw.grupoum.oauth.application.record.RequestUpdateUser;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
+import constsw.grupoum.oauth.application.record.ResponseUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.application.util.ApiExceptionUtils;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
@@ -22,7 +27,6 @@ import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUpdateUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
-import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
 
@@ -33,16 +37,26 @@ public class UserServiceImpl implements UserService {
     @Value("${integration.keycloak.realm}")
     String realm;
 
+    private final UserMapper userMapper;
+
+    private final ObjectMapper mapper;
+
     private final ApiExceptionUtils apiExceptions;
 
     private final KeycloakService keycloakService;
 
     @Override
-    public Collection<User> findAll(String authorization, Boolean enabled) throws ApiException {
+    public Collection<ResponseUser> findAll(String authorization, Boolean enabled) throws ApiException {
         try {
             RequestAllUsers requestAllUsers = new RequestAllUsers(realm, authorization, enabled);
 
-            return keycloakService.getAllUsers(requestAllUsers);
+            Collection<ResponseUser> aham = mapper.convertValue(keycloakService.getAllUsers(requestAllUsers),
+                    new TypeReference<Collection<ResponseUser>>() {
+                    });
+
+            aham = userMapper.collectionUsertoCollectionResponseUsers(keycloakService.getAllUsers(requestAllUsers));
+
+            return aham;
 
         } catch (KeycloakException e) {
             throw apiExceptions
@@ -65,10 +79,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User finById(String authorization, String id) throws ApiException {
+    public ResponseUser finById(String authorization, String id) throws ApiException {
         try {
             RequestUserById requestUserById = new RequestUserById(realm, authorization, id);
-            return keycloakService.userById(requestUserById);
+            return userMapper.userToResponseUser(keycloakService.userById(requestUserById));
         } catch (KeycloakException e) {
             throw apiExceptions
                     .retrieve(e.getStatus(),
