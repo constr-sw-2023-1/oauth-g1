@@ -17,6 +17,7 @@ import constsw.grupoum.oauth.application.util.ApiExceptionUtils;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -98,6 +99,18 @@ public class UserServiceImpl implements UserService {
                     request.username(),
                     request.email(), request.firstName(), request.lastName(), true);
             keycloakService.updateUser(realm, authorization, id, newUser);
+        } catch (KeycloakException e) {
+            throw apiExceptions
+                    .retrieve(e.getStatus(),
+                            Arrays.asList(new FilterException(HttpStatus.UNAUTHORIZED, TypeException.USERS)))
+                    .newException(e);
+        }
+    }
+
+    @Override
+    public void newPassword(String authorization, String id, String password) throws ApiException {
+        try {
+            keycloakService.newPassword(realm, authorization, id, new RequestNewPassword("password", password, false));
         } catch (KeycloakException e) {
             throw apiExceptions
                     .retrieve(e.getStatus(),
