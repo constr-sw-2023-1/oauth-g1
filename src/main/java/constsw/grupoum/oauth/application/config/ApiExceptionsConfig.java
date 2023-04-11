@@ -11,6 +11,7 @@ import constsw.grupoum.oauth.application.exception.BadRequestException;
 import constsw.grupoum.oauth.application.exception.ForbiddenException;
 import constsw.grupoum.oauth.application.exception.InternalServerErrorException;
 import constsw.grupoum.oauth.application.exception.InvalidCredentialsException;
+import constsw.grupoum.oauth.application.exception.InvalidTokenException;
 import constsw.grupoum.oauth.application.exception.NotFoundException;
 import constsw.grupoum.oauth.application.exception.UnauthorizedException;
 
@@ -20,11 +21,12 @@ public class ApiExceptionsConfig {
     @Bean
     public Collection<ApiException> estrategias() {
         return Arrays.asList(new UnauthorizedException(),
-                new BadRequestException(),
-                new InternalServerErrorException(),
                 new ForbiddenException(),
                 new NotFoundException(),
-                new InvalidCredentialsException());
+                new BadRequestException(),
+                new InternalServerErrorException(),
+                new InvalidCredentialsException(),
+                new InvalidTokenException());
     }
 
 }
