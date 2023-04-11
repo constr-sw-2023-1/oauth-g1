@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.application.exception.FilterException;
 import constsw.grupoum.oauth.application.exception.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 
@@ -15,12 +16,12 @@ public class ApiExceptionUtils {
 
     private final Collection<ApiException> exceptionStrategies;
 
-    public ApiException retrieve(HttpStatus status, String fromMethod) throws ApiException {
+    public ApiException retrieve(HttpStatus status, Collection<FilterException> filtros) {
         return exceptionStrategies
                 .stream()
-                .filter(apiException -> apiException.applies(status, fromMethod))
+                .filter(apiException -> apiException.applies(status, filtros))
                 .findFirst()
-                .orElseThrow(() -> new InternalServerErrorException());
+                .orElse(new InternalServerErrorException());
     }
 
 }
