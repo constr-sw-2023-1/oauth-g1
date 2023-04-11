@@ -1,4 +1,8 @@
 package constsw.grupoum.oauth.application.record;
 
-public record RequestLogin(String username, String password) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record RequestLogin(
+        @JsonProperty("username") String username,
+        @JsonProperty("password") String password) {
 }
