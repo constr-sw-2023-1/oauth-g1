@@ -11,6 +11,7 @@ import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -41,6 +42,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(String accessToken, String id) throws ApiException {
+        try {
+            RequestDeleteUserById requestDeleteUserById = new RequestDeleteUserById(realm, accessToken, id);
+            keycloakService.deleteUser(requestDeleteUserById);
+        } catch (KeycloakException e) {
+            throw new ApiException(e.getStatus(),
+                    String.format("Erro: %s, Descricao: %s", e.getError().error(), e.getError().errorDescription()),
+                    e);
+        }
+    }
+
     public User finById(String authorization, String id) throws ApiException {
         try {
             RequestUserById requestUserById = new RequestUserById(realm, authorization, id);
