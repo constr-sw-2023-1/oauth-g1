@@ -11,6 +11,7 @@ import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.exception.FilterException;
 import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
 import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.RequestUpdateUser;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.application.util.ApiExceptionUtils;
@@ -19,6 +20,7 @@ import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestUpdateUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.service.KeycloakService;
@@ -93,11 +95,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(String authorization, String id, RequestNewUser request) throws ApiException {
+    public void updateUser(String authorization, String id, RequestUpdateUser request) throws ApiException {
         try {
-            RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
-                    request.username(),
-                    request.email(), request.firstName(), request.lastName(), true);
+            RequestUpdateUserKeycloak newUser = new RequestUpdateUserKeycloak(request.firstName(), request.lastName());
             keycloakService.updateUser(realm, authorization, id, newUser);
         } catch (KeycloakException e) {
             throw apiExceptions
