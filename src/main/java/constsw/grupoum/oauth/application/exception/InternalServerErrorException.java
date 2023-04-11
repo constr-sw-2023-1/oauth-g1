@@ -28,12 +28,12 @@ public class InternalServerErrorException extends ApiException {
     }
 
     @Override
-    public BadRequestException newException() {
-        return new BadRequestException();
+    public InternalServerErrorException newException() {
+        return new InternalServerErrorException();
     }
 
     @Override
-    public BadRequestException newException(Throwable cause) {
-        return new BadRequestException(cause);
+    public InternalServerErrorException newException(Throwable cause) {
+        return new InternalServerErrorException(cause);
     }
 }
