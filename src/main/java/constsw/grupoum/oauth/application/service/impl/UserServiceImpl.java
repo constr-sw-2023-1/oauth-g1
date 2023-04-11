@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.exception.FilterException;
 import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
@@ -39,8 +36,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final ObjectMapper mapper;
-
     private final ApiExceptionUtils apiExceptions;
 
     private final KeycloakService keycloakService;
@@ -50,13 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             RequestAllUsers requestAllUsers = new RequestAllUsers(realm, authorization, enabled);
 
-            Collection<ResponseUser> aham = mapper.convertValue(keycloakService.getAllUsers(requestAllUsers),
-                    new TypeReference<Collection<ResponseUser>>() {
-                    });
-
-            aham = userMapper.collectionUsertoCollectionResponseUsers(keycloakService.getAllUsers(requestAllUsers));
-
-            return aham;
+            return userMapper.collectionUsertoCollectionResponseUsers(keycloakService.getAllUsers(requestAllUsers));
 
         } catch (KeycloakException e) {
             throw apiExceptions
