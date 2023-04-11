@@ -6,7 +6,7 @@ volumes:
     external: true
 services:
   spring:
-    container_name: spring
+    container_name: oauth
     build:
       context: .
       dockerfile: Dockerfile
