@@ -107,13 +107,14 @@ public class UsersController {
 
     @Operation(description = "Update user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseNewUser.class))),
+            @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user, @PathVariable String id) {
+    public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user,
+            @PathVariable String id) {
         try {
             log.info(String.format("PUT -> /users BODY: %s", user));
             service.updateUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id, user);
