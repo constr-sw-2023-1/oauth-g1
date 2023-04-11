@@ -1,7 +1,6 @@
 package constsw.grupoum.oauth.application.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import java.util.Collection;
 
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.ResponseError;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
@@ -49,8 +49,8 @@ public class UsersController {
     @Operation(description = "Get all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = User.class)))),
-            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @GetMapping
     public ResponseEntity<?> getAllUsers(@RequestHeader HttpHeaders headers,
             @RequestParam(required = false) Boolean enabled) {
@@ -64,16 +64,16 @@ public class UsersController {
             return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
         }
     }
 
     @Operation(description = "Delete user by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204"),
-            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {
@@ -84,16 +84,16 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
         }
     }
 
     @Operation(description = "Get user by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))),
-            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@RequestHeader HttpHeaders headers, @PathVariable String id) {
         try {
@@ -105,16 +105,16 @@ public class UsersController {
             return new ResponseEntity<User>(user, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
         }
     }
 
     @Operation(description = "Create new user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseNewUser.class))),
-            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "409", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "409", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PostMapping
     public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user) {
         try {
@@ -125,17 +125,17 @@ public class UsersController {
             return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
         }
     }
 
     @Operation(description = "Update user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "400", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user,
             @PathVariable String id) {
@@ -146,7 +146,7 @@ public class UsersController {
             return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
         }
     }
 }

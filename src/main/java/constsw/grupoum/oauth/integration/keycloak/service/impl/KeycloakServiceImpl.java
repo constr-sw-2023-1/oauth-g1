@@ -215,7 +215,8 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak user) throws KeycloakException {
+    public void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak user)
+            throws KeycloakException {
         try {
 
             WebClient
@@ -229,8 +230,6 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .retrieve()
                     .toBodilessEntity()
                     .block();
-
-            
 
         } catch (WebClientRequestException e) {
             throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
