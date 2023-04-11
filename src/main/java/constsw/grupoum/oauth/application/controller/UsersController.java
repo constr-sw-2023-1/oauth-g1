@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,6 +123,27 @@ public class UsersController {
                     user);
             log.info(String.format("POST -> /users RESPONSE: %s", HttpStatus.CREATED));
             return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<String>(e.getMessage(), e.getStatus());
+        }
+    }
+
+    @Operation(description = "Update user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = TEXT_PLAIN_VALUE, schema = @Schema(implementation = String.class))) })
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user,
+            @PathVariable String id) {
+        try {
+            log.info(String.format("PUT -> /users BODY: %s", user));
+            service.updateUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id, user);
+            log.info(String.format("PUT -> /users RESPONSE: %s", HttpStatus.OK));
+            return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<String>(e.getMessage(), e.getStatus());
