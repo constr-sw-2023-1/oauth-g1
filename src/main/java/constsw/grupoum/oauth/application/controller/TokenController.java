@@ -46,7 +46,7 @@ public class TokenController {
             return new ResponseEntity<Token>(token, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 
@@ -65,7 +65,7 @@ public class TokenController {
             return new ResponseEntity<Token>(token, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 }

@@ -50,6 +50,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = User.class)))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @GetMapping
     public ResponseEntity<?> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -64,7 +65,7 @@ public class UsersController {
             return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 
@@ -72,6 +73,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @DeleteMapping("/{id}")
@@ -84,7 +86,7 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 
@@ -92,6 +94,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @GetMapping("/{id}")
@@ -105,7 +108,7 @@ public class UsersController {
             return new ResponseEntity<User>(user, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 
@@ -113,6 +116,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseNewUser.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "409", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PostMapping
@@ -125,7 +129,7 @@ public class UsersController {
             return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 
@@ -134,6 +138,7 @@ public class UsersController {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PutMapping("/{id}")
@@ -146,7 +151,7 @@ public class UsersController {
             return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
-            return new ResponseEntity<ResponseError>(e.getError(), e.getStatus());
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
 }

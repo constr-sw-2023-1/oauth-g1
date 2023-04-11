@@ -1,38 +1,60 @@
 package constsw.grupoum.oauth.application.exception;
 
+import java.util.Collection;
+
 import org.springframework.http.HttpStatus;
 
+import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
 import constsw.grupoum.oauth.application.record.ResponseError;
 import lombok.Getter;
 
 @Getter
 public abstract class ApiException extends Exception implements ApiExceptionStrategy<ApiException> {
 
-    private HttpStatus status;
+    protected final HttpStatus STATUS;
 
-    private ResponseError error;
+    protected final TypeException TYPE;
 
-    protected ApiException(HttpStatus status, ResponseError error) {
+    protected final ResponseError ERROR;
+
+    protected ApiException(HttpStatus status, TypeException type, ResponseError error) {
         super();
-        this.status = status;
-        this.error = error;
+        this.STATUS = status;
+        this.TYPE = type;
+        this.ERROR = error;
     }
 
-    protected ApiException(HttpStatus status, ResponseError error, String message) {
+    protected ApiException(HttpStatus status, TypeException type, ResponseError error, String message) {
         super(message);
-        this.status = status;
-        this.error = error;
+        this.STATUS = status;
+        this.TYPE = type;
+        this.ERROR = error;
     }
 
-    protected ApiException(HttpStatus status, ResponseError error, Throwable cause) {
+    protected ApiException(HttpStatus status, TypeException type, ResponseError error, Throwable cause) {
         super(cause);
-        this.status = status;
-        this.error = error;
+        this.STATUS = status;
+        this.TYPE = type;
+        this.ERROR = error;
     }
 
-    protected ApiException(HttpStatus status, ResponseError error, String message, Throwable cause) {
+    protected ApiException(HttpStatus status, TypeException type, ResponseError error, String message,
+            Throwable cause) {
         super(message, cause);
-        this.status = status;
-        this.error = error;
+        this.STATUS = status;
+        this.TYPE = type;
+        this.ERROR = error;
+    }
+
+    @Override
+    public Boolean applies(HttpStatus status, Collection<FilterException> filtros) {
+
+        FilterException filter = filtros
+                .stream()
+                .filter(f -> STATUS.equals(f.status()))
+                .findFirst()
+                .orElse(new FilterException(STATUS, TYPE));
+
+        return STATUS.equals(status) && STATUS.equals(filter.status()) && TYPE.equals(filter.type());
     }
 }

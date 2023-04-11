@@ -5,34 +5,34 @@ import org.springframework.http.HttpStatus;
 import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
 import constsw.grupoum.oauth.application.record.ResponseError;
 
-public class BadRequestException extends ApiException {
+public class NotFoundException extends ApiException {
 
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-002";
+    private static final String CODE = "OA-005";
 
-    private static final String DEAFULT_MESSAGE = "Requisicao mal formada";
+    private static final String DEAFULT_MESSAGE = "Não encontrado";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 
-    public BadRequestException() {
+    public NotFoundException() {
         super(STATUS, TYPE, ERROR);
     }
 
-    protected BadRequestException(Throwable cause) {
+    protected NotFoundException(Throwable cause) {
         super(STATUS, TYPE, ERROR, cause);
     }
 
     @Override
-    public BadRequestException newException() {
-        return new BadRequestException();
+    public NotFoundException newException() {
+        return new NotFoundException();
     }
 
     @Override
-    public BadRequestException newException(Throwable cause) {
-        return new BadRequestException(cause);
+    public NotFoundException newException(Throwable cause) {
+        return new NotFoundException(cause);
     }
 
 }

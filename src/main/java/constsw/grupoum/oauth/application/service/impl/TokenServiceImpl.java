@@ -1,9 +1,15 @@
 package constsw.grupoum.oauth.application.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
+import constsw.grupoum.oauth.application.exception.FilterException;
+import constsw.grupoum.oauth.application.exception.enumeration.TypeException;
 import constsw.grupoum.oauth.application.record.RequestLogin;
 import constsw.grupoum.oauth.application.record.RequestRefreshToken;
 import constsw.grupoum.oauth.application.service.TokenService;
@@ -39,7 +45,10 @@ public class TokenServiceImpl implements TokenService {
             return keycloakService.token(request);
         } catch (KeycloakException e) {
 
-            throw apiExceptions.retrieve(e.getStatus(), "tokenRetrieveTokenWithCredentials").newException(e);
+            throw apiExceptions
+                    .retrieve(e.getStatus(),
+                            Arrays.asList(new FilterException(HttpStatus.UNAUTHORIZED, TypeException.LOGIN)))
+                    .newException(e);
         }
     }
 
@@ -51,7 +60,7 @@ public class TokenServiceImpl implements TokenService {
             return keycloakService.token(request);
         } catch (KeycloakException e) {
 
-            throw apiExceptions.retrieve(e.getStatus(), "tokenRetrieveTokenWithRefreshToken").newException(e);
+            throw apiExceptions.retrieve(e.getStatus(), new ArrayList<FilterException>()).newException(e);
         }
     }
 }
