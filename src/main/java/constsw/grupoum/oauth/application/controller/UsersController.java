@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -154,4 +155,27 @@ public class UsersController {
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
         }
     }
+
+    @Operation(description = "Reset password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
+            @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> newPassword(@RequestHeader HttpHeaders headers, @PathVariable String id,
+            @RequestBody String password) {
+        try {
+            log.info(String.format("PATCH -> /users/%s BODY: password:****", id));
+            service.newPassword(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+                    id,
+                    password);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (ApiException e) {
+            log.error(e);
+            return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
+        }
+    }
+
 }

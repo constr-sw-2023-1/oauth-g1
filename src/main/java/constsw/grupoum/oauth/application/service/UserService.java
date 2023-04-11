@@ -16,5 +16,8 @@ public interface UserService {
     void deleteUser(String accessToken, String id) throws ApiException;
 
     ResponseNewUser creatUser(String authorization, RequestNewUser name) throws ApiException;
+
     void updateUser(String authorization, String id, RequestNewUser user) throws ApiException;
-}   
+
+    void newPassword(String authorization, String id, String password) throws ApiException;
+}
