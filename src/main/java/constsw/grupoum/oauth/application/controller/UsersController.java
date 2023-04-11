@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.record.RequestNewUser;
+import constsw.grupoum.oauth.application.record.RequestUpdateUser;
 import constsw.grupoum.oauth.application.record.ResponseError;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
 import constsw.grupoum.oauth.application.service.UserService;
@@ -143,7 +144,7 @@ public class UsersController {
             @ApiResponse(responseCode = "404", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user,
+    public ResponseEntity<?> updateUser(@RequestHeader HttpHeaders headers, @RequestBody RequestUpdateUser user,
             @PathVariable String id) {
         try {
             log.info(String.format("PUT -> /users BODY: %s", user));

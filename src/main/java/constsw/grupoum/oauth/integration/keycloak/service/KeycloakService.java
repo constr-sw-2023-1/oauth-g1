@@ -8,6 +8,7 @@ import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestUpdateUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
@@ -28,7 +29,7 @@ public interface KeycloakService {
 
     String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
 
-    void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak newUser)
+    void updateUser(String realm, String authorization, String id, RequestUpdateUserKeycloak newUser)
             throws KeycloakException;
 
     void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword)
