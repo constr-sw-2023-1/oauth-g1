@@ -106,8 +106,9 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/admin/realms/{realm}/users")
+                            .queryParam("enabled", requestAllUsers.enabled())
                             .build(requestAllUsers.realm()))
-                    .header("Authorization", requestAllUsers.acessToken())
+                    .header("Authorization", requestAllUsers.authorization())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
                     })
