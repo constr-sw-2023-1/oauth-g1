@@ -13,8 +13,8 @@ import constsw.grupoum.oauth.application.exception.ApiException;
 import constsw.grupoum.oauth.application.record.RequestLogin;
 import constsw.grupoum.oauth.application.record.RequestRefreshToken;
 import constsw.grupoum.oauth.application.record.ResponseError;
+import constsw.grupoum.oauth.application.record.ResponseToken;
 import constsw.grupoum.oauth.application.service.TokenService;
-import constsw.grupoum.oauth.integration.keycloak.record.Token;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,7 +32,7 @@ public class TokenController {
 
     @Operation(description = "Login")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = Token.class))),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseToken.class))),
             @ApiResponse(responseCode = "401", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PostMapping(path = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -40,10 +40,10 @@ public class TokenController {
         try {
             log.info(String.format("POST -> /login Request Body: Username: %s Password: *****",
                     requestLogin.username()));
-            Token token = tokenService.retrieveTokenWithCredentials(requestLogin);
+            ResponseToken token = tokenService.retrieveTokenWithCredentials(requestLogin);
             log.info(String.format("POST -> /login RESPONSE: %s", token));
 
-            return new ResponseEntity<Token>(token, HttpStatus.OK);
+            return new ResponseEntity<ResponseToken>(token, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
@@ -52,17 +52,17 @@ public class TokenController {
 
     @Operation(description = "Refresh token")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = Token.class))),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseToken.class))),
             @ApiResponse(responseCode = "500", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseError.class))) })
     @PostMapping(path = "/token", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken) {
         try {
             log.info(String.format("POST -> /token Request Body: Refresh Token: %s",
                     requestRefreshToken.refreshToken()));
-            Token token = tokenService.retrieveTokenWithRefreshToken(requestRefreshToken);
+            ResponseToken token = tokenService.retrieveTokenWithRefreshToken(requestRefreshToken);
             log.info(String.format("POST -> /token RESPONSE: %s", token));
 
-            return new ResponseEntity<Token>(token, HttpStatus.OK);
+            return new ResponseEntity<ResponseToken>(token, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
