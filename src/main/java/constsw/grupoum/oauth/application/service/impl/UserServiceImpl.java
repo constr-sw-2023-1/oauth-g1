@@ -17,7 +17,6 @@ import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.application.util.ApiExceptionUtils;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
-import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUpdateUserKeycloak;
@@ -53,10 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String accessToken, String id) throws ApiException {
+    public void deleteUser(String authorization, String id) throws ApiException {
         try {
-            RequestDeleteUserById requestDeleteUserById = new RequestDeleteUserById(realm, accessToken, id);
-            keycloakService.deleteUser(requestDeleteUserById);
+            RequestUpdateUserKeycloak user = new RequestUpdateUserKeycloak(null, null, false);
+            keycloakService.updateUser(realm, authorization, id, user);
         } catch (KeycloakException e) {
             throw apiExceptions
                     .retrieve(e.getStatus(),
@@ -97,8 +96,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String authorization, String id, RequestUpdateUser request) throws ApiException {
         try {
-            RequestUpdateUserKeycloak newUser = new RequestUpdateUserKeycloak(request.firstName(), request.lastName());
-            keycloakService.updateUser(realm, authorization, id, newUser);
+            RequestUpdateUserKeycloak user = new RequestUpdateUserKeycloak(request.firstName(), request.lastName(), true);
+            keycloakService.updateUser(realm, authorization, id, user);
         } catch (KeycloakException e) {
             throw apiExceptions
                     .retrieve(e.getStatus(),

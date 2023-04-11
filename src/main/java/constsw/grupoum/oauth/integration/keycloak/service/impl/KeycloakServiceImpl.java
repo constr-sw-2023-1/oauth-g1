@@ -24,7 +24,6 @@ import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUpdateUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
-import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.record.UserInfo;
@@ -114,32 +113,6 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
                     })
-                    .block();
-
-        } catch (WebClientRequestException e) {
-            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
-        } catch (WebClientResponseException e) {
-            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
-                    e.getResponseBodyAs(Error.class),
-                    e);
-        } catch (Exception e) {
-            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
-        }
-    }
-
-    @Override
-    public Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException {
-        try {
-
-            return WebClient
-                    .create(url)
-                    .delete()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/admin/realms/{realm}/users/{id}")
-                            .build(requestDeleteUserById.realm(), requestDeleteUserById.id()))
-                    .header("Authorization", requestDeleteUserById.accessToken())
-                    .retrieve()
-                    .bodyToMono(Void.class)
                     .block();
 
         } catch (WebClientRequestException e) {
