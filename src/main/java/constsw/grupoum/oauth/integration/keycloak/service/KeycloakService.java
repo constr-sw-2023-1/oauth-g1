@@ -5,6 +5,7 @@ import java.util.Collection;
 import constsw.grupoum.oauth.integration.keycloak.exception.KeycloakException;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestAllUsers;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestNewPassword;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
@@ -21,9 +22,13 @@ public interface KeycloakService {
 
     Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
 
+    Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException;
+
     User userById(RequestUserById requestUserById) throws KeycloakException;
 
     String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
+
+    void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak newUser) throws KeycloakException;
 
     void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword) throws KeycloakException;
 }

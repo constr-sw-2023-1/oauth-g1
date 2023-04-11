@@ -23,6 +23,7 @@ import constsw.grupoum.oauth.integration.keycloak.record.RequestNewUserKeycloak;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestToken;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.RequestUserInfo;
+import constsw.grupoum.oauth.integration.keycloak.record.RequestDeleteUserById;
 import constsw.grupoum.oauth.integration.keycloak.record.Token;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.integration.keycloak.record.UserInfo;
@@ -106,8 +107,9 @@ public class KeycloakServiceImpl implements KeycloakService {
                     .get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/admin/realms/{realm}/users")
+                            .queryParam("enabled", requestAllUsers.enabled())
                             .build(requestAllUsers.realm()))
-                    .header("Authorization", requestAllUsers.acessToken())
+                    .header("Authorization", requestAllUsers.authorization())
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Collection<User>>() {
                     })
@@ -125,6 +127,31 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
+    public Void deleteUser(RequestDeleteUserById requestDeleteUserById) throws KeycloakException {
+        try {
+
+            return WebClient
+                    .create(url)
+                    .delete()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}")
+                            .build(requestDeleteUserById.realm(), requestDeleteUserById.id()))
+                    .header("Authorization", requestDeleteUserById.accessToken())
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
     public User userById(RequestUserById requestUserById) throws KeycloakException {
         try {
 
@@ -189,7 +216,36 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword) throws KeycloakException {
+    public void updateUser(String realm, String authorization, String id, RequestNewUserKeycloak user)
+            throws KeycloakException {
+        try {
+
+            WebClient
+                    .create(url)
+                    .put()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/admin/realms/{realm}/users/{id}")
+                            .build(realm, id))
+                    .header("Authorization", authorization)
+                    .body(BodyInserters.fromValue(user))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+        } catch (WebClientRequestException e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (WebClientResponseException e) {
+            throw new KeycloakException(HttpStatus.valueOf(e.getStatusCode().value()),
+                    e.getResponseBodyAs(Error.class),
+                    e);
+        } catch (Exception e) {
+            throw new KeycloakException(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Override
+    public void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword)
+            throws KeycloakException {
         try {
 
             WebClient
