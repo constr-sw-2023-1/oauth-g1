@@ -11,7 +11,7 @@ public class InvalidCredentialsException extends ApiException {
 
     private static final TypeException TYPE = TypeException.LOGIN;
 
-    private static final String CODE = "OA-003";
+    private static final String CODE = "OA-103";
 
     private static final String DEAFULT_MESSAGE = "Credenciais invalidas";
 

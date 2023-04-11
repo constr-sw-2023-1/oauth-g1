@@ -11,9 +11,9 @@ public class UnauthorizedException extends ApiException {
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-001";
+    private static final String CODE = "OA-101";
 
-    private static final String DEAFULT_MESSAGE = "Não autorizado";
+    private static final String DEAFULT_MESSAGE = "Nao autorizado";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 

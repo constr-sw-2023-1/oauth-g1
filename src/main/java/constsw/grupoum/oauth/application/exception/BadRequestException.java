@@ -11,9 +11,9 @@ public class BadRequestException extends ApiException {
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-002";
+    private static final String CODE = "OA-401";
 
-    private static final String DEAFULT_MESSAGE = "Requisicao mal formada";
+    private static final String DEAFULT_MESSAGE = "Requisicao invalida";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 

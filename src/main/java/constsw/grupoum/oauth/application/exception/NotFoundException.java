@@ -11,9 +11,9 @@ public class NotFoundException extends ApiException {
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-005";
+    private static final String CODE = "OA-301";
 
-    private static final String DEAFULT_MESSAGE = "Não encontrado";
+    private static final String DEAFULT_MESSAGE = "Nao encontrado";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 

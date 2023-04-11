@@ -11,9 +11,9 @@ public class InternalServerErrorException extends ApiException {
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-003";
+    private static final String CODE = "OA-501";
 
-    private static final String DEAFULT_MESSAGE = "Erro interno favor contatar professor Arruda";
+    private static final String DEAFULT_MESSAGE = "Erro interno da aplicacao, favor contatar professor Arruda";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 

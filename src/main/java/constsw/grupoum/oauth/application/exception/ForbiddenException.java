@@ -11,9 +11,9 @@ public class ForbiddenException extends ApiException {
 
     private static final TypeException TYPE = TypeException.ALL;
 
-    private static final String CODE = "OA-004";
+    private static final String CODE = "OA-201";
 
-    private static final String DEAFULT_MESSAGE = "Acesso proibido";
+    private static final String DEAFULT_MESSAGE = "Acesso negado";
 
     private static final ResponseError ERROR = new ResponseError(CODE, DEAFULT_MESSAGE);
 
