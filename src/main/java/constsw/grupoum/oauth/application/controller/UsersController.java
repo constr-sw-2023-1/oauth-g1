@@ -24,6 +24,7 @@ import constsw.grupoum.oauth.application.record.RequestNewUser;
 import constsw.grupoum.oauth.application.record.RequestUpdateUser;
 import constsw.grupoum.oauth.application.record.ResponseError;
 import constsw.grupoum.oauth.application.record.ResponseNewUser;
+import constsw.grupoum.oauth.application.record.ResponseUser;
 import constsw.grupoum.oauth.application.service.UserService;
 import constsw.grupoum.oauth.integration.keycloak.record.User;
 import constsw.grupoum.oauth.util.HeadersUtils;
@@ -60,11 +61,11 @@ public class UsersController {
         try {
 
             log.info("GET -> /users");
-            Collection<User> users = service.findAll(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+            Collection<ResponseUser> users = service.findAll(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
                     enabled);
             log.info(String.format("GET -> /users RESPONSE: %s", users));
 
-            return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+            return new ResponseEntity<Collection<ResponseUser>>(users, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
@@ -104,10 +105,10 @@ public class UsersController {
         try {
 
             log.info("GET -> /users/{id}");
-            User user = service.finById(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
+            ResponseUser user = service.finById(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
             log.info(String.format("GET -> /users/{id} RESPONSE: %s", user));
 
-            return new ResponseEntity<User>(user, HttpStatus.OK);
+            return new ResponseEntity<ResponseUser>(user, HttpStatus.OK);
         } catch (ApiException e) {
             log.error(e);
             return new ResponseEntity<ResponseError>(e.getERROR(), e.getSTATUS());
