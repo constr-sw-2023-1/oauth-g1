@@ -5,7 +5,7 @@ volumes:
   keycloak-data:
     external: true
 services:
-  spring:
+  oauth:
     container_name: oauth
     build:
       context: .
@@ -21,8 +21,6 @@ services:
       - KEYCLOAK_CLIENT_SECRET=client-secret
     networks:
       - grupoum
-    depends_on:
-      - keycloak
   keycloak:
     container_name: keycloak
     image: jboss/keycloak:latest
