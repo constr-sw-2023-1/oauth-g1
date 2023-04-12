@@ -6,12 +6,19 @@ volumes:
     external: true
 services:
   spring:
-    container_name: spring
+    container_name: oauth
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - 8080:80
+    environment:
+      - SERVER_PORT=80
+      - LOGGING_LEVEL=INFO
+      - KEYCLOAK_REALM=master
+      - KEYCLOAK_URL=http://keycloak:8080/auth
+      - KEYCLOAK_CLIENT_ID=client-id
+      - KEYCLOAK_CLIENT_SECRET=client-secret
     networks:
       - grupoum
     depends_on:
