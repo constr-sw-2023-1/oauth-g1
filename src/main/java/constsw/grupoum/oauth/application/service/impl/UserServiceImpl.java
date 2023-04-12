@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public ResponseUser finById(String authorization, String id) throws ApiException {
+    @Override
+    public ResponseUser findById(String authorization, String id) throws ApiException {
         try {
             RequestUserById requestUserById = new RequestUserById(realm, authorization, id);
             return userMapper.userToResponseUser(keycloakService.userById(requestUserById));
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseNewUser creatUser(String authorization, RequestNewUser request) throws ApiException {
+    public ResponseNewUser createUser(String authorization, RequestNewUser request) throws ApiException {
         try {
             RequestNewUserKeycloak newUser = new RequestNewUserKeycloak(
                     request.username(),
@@ -99,7 +100,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String authorization, String id, RequestUpdateUser request) throws ApiException {
         try {
-            RequestUpdateUserKeycloak user = new RequestUpdateUserKeycloak(request.firstName(), request.lastName(), true);
+            RequestUpdateUserKeycloak user = new RequestUpdateUserKeycloak(request.firstName(), request.lastName(),
+                    true);
             keycloakService.updateUser(realm, authorization, id, user);
         } catch (KeycloakException e) {
             throw apiExceptions

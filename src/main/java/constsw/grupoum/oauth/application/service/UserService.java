@@ -10,13 +10,13 @@ import constsw.grupoum.oauth.application.record.ResponseUser;
 
 public interface UserService {
 
-    ResponseUser finById(String acessToken, String id) throws ApiException;
+    ResponseUser findById(String acessToken, String id) throws ApiException;
 
     Collection<ResponseUser> findAll(String authorization, Boolean enabled) throws ApiException;
 
-    void deleteUser(String accessToken, String id) throws ApiException;
+    void deleteUser(String authorization, String id) throws ApiException;
 
-    ResponseNewUser creatUser(String authorization, RequestNewUser name) throws ApiException;
+    ResponseNewUser createUser(String authorization, RequestNewUser name) throws ApiException;
 
     void updateUser(String authorization, String id, RequestUpdateUser user) throws ApiException;
 

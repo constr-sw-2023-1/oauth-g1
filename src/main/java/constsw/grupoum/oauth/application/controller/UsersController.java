@@ -105,7 +105,7 @@ public class UsersController {
         try {
 
             log.info("GET -> /users/{id}");
-            ResponseUser user = service.finById(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
+            ResponseUser user = service.findById(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION), id);
             log.info(String.format("GET -> /users/{id} RESPONSE: %s", user));
 
             return new ResponseEntity<ResponseUser>(user, HttpStatus.OK);
@@ -126,7 +126,7 @@ public class UsersController {
     public ResponseEntity<?> createUser(@RequestHeader HttpHeaders headers, @RequestBody RequestNewUser user) {
         try {
             log.info(String.format("POST -> /users BODY: %s", user));
-            ResponseNewUser newUser = service.creatUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
+            ResponseNewUser newUser = service.createUser(headersUtils.getValue(headers, HttpHeaders.AUTHORIZATION),
                     user);
             log.info(String.format("POST -> /users RESPONSE: %s", HttpStatus.CREATED));
             return new ResponseEntity<ResponseNewUser>(newUser, HttpStatus.CREATED);

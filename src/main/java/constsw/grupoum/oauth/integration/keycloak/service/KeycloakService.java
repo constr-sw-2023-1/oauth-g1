@@ -16,19 +16,19 @@ import constsw.grupoum.oauth.integration.keycloak.record.UserInfo;
 
 public interface KeycloakService {
 
-    Token token(RequestToken requestToken) throws KeycloakException;
+        Token token(RequestToken requestToken) throws KeycloakException;
 
-    UserInfo userInfo(RequestUserInfo requestUserInfo) throws KeycloakException;
+        UserInfo userInfo(RequestUserInfo requestUserInfo) throws KeycloakException;
 
-    Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
+        Collection<User> getAllUsers(RequestAllUsers requestAllUsers) throws KeycloakException;
 
-    User userById(RequestUserById requestUserById) throws KeycloakException;
+        User userById(RequestUserById requestUserById) throws KeycloakException;
 
-    String createUser(String realm, String accessToken, RequestNewUserKeycloak user) throws KeycloakException;
+        String createUser(String realm, String authorization, RequestNewUserKeycloak user) throws KeycloakException;
 
-    void updateUser(String realm, String authorization, String id, RequestUpdateUserKeycloak newUser)
-            throws KeycloakException;
+        void updateUser(String realm, String authorization, String id, RequestUpdateUserKeycloak newUser)
+                        throws KeycloakException;
 
-    void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword)
-            throws KeycloakException;
+        void newPassword(String realm, String authorization, String id, RequestNewPassword requestNewPassword)
+                        throws KeycloakException;
 }
