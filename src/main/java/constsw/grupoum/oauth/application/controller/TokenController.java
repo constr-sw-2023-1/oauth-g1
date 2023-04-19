@@ -58,7 +58,7 @@ public class TokenController {
     public ResponseEntity<?> token(@ModelAttribute RequestRefreshToken requestRefreshToken) {
         try {
             log.info(String.format("POST -> /token Request Body: Refresh Token: %s",
-                    requestRefreshToken.refreshToken()));
+                    requestRefreshToken.refresh_token()));
             ResponseToken token = tokenService.retrieveTokenWithRefreshToken(requestRefreshToken);
             log.info(String.format("POST -> /token RESPONSE: %s", token));
 
