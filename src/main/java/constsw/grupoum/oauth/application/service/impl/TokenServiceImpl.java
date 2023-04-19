@@ -60,7 +60,7 @@ public class TokenServiceImpl implements TokenService {
     public ResponseToken retrieveTokenWithRefreshToken(RequestRefreshToken requestRefreshToken) throws ApiException {
         try {
             RequestToken request = new RequestToken(realm, clientId, clientSecret, "", "",
-                    requestRefreshToken.refreshToken(),
+                    requestRefreshToken.refresh_token(),
                     "refresh_token");
             return mapper.convertValue(keycloakService.token(request), ResponseToken.class);
         } catch (KeycloakException e) {
